@@ -25,28 +25,9 @@ pip install onnx onnxruntime onnxscript onnxsim
 
 下面是python/numpy和onnx在初始化这一步的代码对比。
 
-<table class="ck-table-resized"><colgroup><col style="width:48.22%;"><col style="width:51.78%;"></colgroup><tbody><tr><td>python</td><td>onnx</td></tr><tr><td><pre><code class="language-text-plain">        self.centroids.append(data[np.random.randint(data.shape[0])])
-
-        for idx_c in range(1, self.k):
-            # Update distances for all points relative to the new set of centroids
-            # self.distance_norm(data)
-
-            self.centroids_distances = np.sum((np.asarray(self.centroids) - data[:, None])**2, axis = -1) # (num_sample, num_centroids)
-
-            # Find the minimum distance to any centroid for each point
-            min_distances=self.centroids_distances.min(axis=1)
-
-            # Probability of selecting next centroid is proportional to squared distance
-            probs=min_distances / min_distances.sum()
-            # Cumulative probabilities for selection
-            cumulative_probs=probs.cumsum()
-
-            # Select the next centroid based on cumulative probabilities
-            rand_prob=np.random.rand()
-            for i in range(len(cumulative_probs)):
-                if rand_prob &lt; cumulative_probs[i]:
-                    self.centroids.append(data[i,:])
-                    break</code></pre></td><td><pre><code class="language-text-plain">    num_sample = op.Shape(data)[0]
+onnx
+```python
+    num_sample = op.Shape(data)[0]
     random_index = op.Cast((op.RandomUniform(dtype = onnx.TensorProto.DOUBLE, shape = [1])*op.Cast(num_sample, to = onnx.TensorProto.DOUBLE)), to = onnx.TensorProto.INT64)[0]
     random_sample = data[random_index]
     centroid_list = op.SequenceConstruct(random_sample)
@@ -58,7 +39,33 @@ pip install onnx onnxruntime onnxscript onnxsim
         cumulative_probs = op.CumSum(probs, axis = 0)
         rand_prob = op.RandomUniform(dtype = onnx.TensorProto.DOUBLE, shape = [1])
         selected_index = op.ArgMin(op.Abs(cumulative_probs - rand_prob), keepdims = 0)
-        centroid_list = op.SequenceInsert(centroid_list, data[selected_index])</code></pre></td></tr></tbody></table>
+        centroid_list = op.SequenceInsert(centroid_list, data[selected_index])
+```
+python
+```python
+self.centroids.append(data[np.random.randint(data.shape[0])])  
+
+        for idx_c in range(1, self.k):
+            # Update distances for all points relative to the new set of centroids
+            # self.distance_norm(data)
+            
+            self.centroids_distances = np.sum((np.asarray(self.centroids) - data[:, None])**2, axis = -1) # (num_sample, num_centroids)
+            
+            # Find the minimum distance to any centroid for each point
+            min_distances=self.centroids_distances.min(axis=1)
+
+            # Probability of selecting next centroid is proportional to squared distance
+            probs=min_distances / min_distances.sum()
+            # Cumulative probabilities for selection
+            cumulative_probs=probs.cumsum() 
+
+            # Select the next centroid based on cumulative probabilities
+            rand_prob=np.random.rand()
+            for i in range(len(cumulative_probs)):
+                if rand_prob < cumulative_probs[i]:
+                    self.centroids.append(data[i,:])
+                    break
+```
 
 可以看出，相比于python使用numpy的函数，onnxscript需要使用[onnx operator算子库](https://onnx.ai/onnx/operators/index.html)来实现大多数的操作，而小部分操作如四则运算、简单索引则可以直接使用并且自动转换。
 
@@ -142,28 +149,9 @@ If you need to run `run_kmeans.mojo` to compare the four implementations, you ne
 
 The following is a code comparison between python/numpy and onnx in the initialization step.
 
-<table class="ck-table-resized"><colgroup><col style="width:48.22%;"><col style="width:51.78%;"></colgroup><tbody><tr><td>python</td><td>onnx</td></tr><tr><td><pre><code class="language-text-plain">        self.centroids.append(data[np.random.randint(data.shape[0])])
-
-        for idx_c in range(1, self.k):
-            # Update distances for all points relative to the new set of centroids
-            # self.distance_norm(data)
-
-            self.centroids_distances = np.sum((np.asarray(self.centroids) - data[:, None])**2, axis = -1) # (num_sample, num_centroids)
-
-            # Find the minimum distance to any centroid for each point
-            min_distances=self.centroids_distances.min(axis=1)
-
-            # Probability of selecting next centroid is proportional to squared distance
-            probs=min_distances / min_distances.sum()
-            # Cumulative probabilities for selection
-            cumulative_probs=probs.cumsum()
-
-            # Select the next centroid based on cumulative probabilities
-            rand_prob=np.random.rand()
-            for i in range(len(cumulative_probs)):
-                if rand_prob &lt; cumulative_probs[i]:
-                    self.centroids.append(data[i,:])
-                    break</code></pre></td><td><pre><code class="language-text-plain">    num_sample = op.Shape(data)[0]
+onnx
+```python
+    num_sample = op.Shape(data)[0]
     random_index = op.Cast((op.RandomUniform(dtype = onnx.TensorProto.DOUBLE, shape = [1])*op.Cast(num_sample, to = onnx.TensorProto.DOUBLE)), to = onnx.TensorProto.INT64)[0]
     random_sample = data[random_index]
     centroid_list = op.SequenceConstruct(random_sample)
@@ -175,7 +163,33 @@ The following is a code comparison between python/numpy and onnx in the initiali
         cumulative_probs = op.CumSum(probs, axis = 0)
         rand_prob = op.RandomUniform(dtype = onnx.TensorProto.DOUBLE, shape = [1])
         selected_index = op.ArgMin(op.Abs(cumulative_probs - rand_prob), keepdims = 0)
-        centroid_list = op.SequenceInsert(centroid_list, data[selected_index])</code></pre></td></tr></tbody></table>
+        centroid_list = op.SequenceInsert(centroid_list, data[selected_index])
+```
+python
+```python
+self.centroids.append(data[np.random.randint(data.shape[0])])  
+
+        for idx_c in range(1, self.k):
+            # Update distances for all points relative to the new set of centroids
+            # self.distance_norm(data)
+            
+            self.centroids_distances = np.sum((np.asarray(self.centroids) - data[:, None])**2, axis = -1) # (num_sample, num_centroids)
+            
+            # Find the minimum distance to any centroid for each point
+            min_distances=self.centroids_distances.min(axis=1)
+
+            # Probability of selecting next centroid is proportional to squared distance
+            probs=min_distances / min_distances.sum()
+            # Cumulative probabilities for selection
+            cumulative_probs=probs.cumsum() 
+
+            # Select the next centroid based on cumulative probabilities
+            rand_prob=np.random.rand()
+            for i in range(len(cumulative_probs)):
+                if rand_prob < cumulative_probs[i]:
+                    self.centroids.append(data[i,:])
+                    break
+```
 
 It can be seen that compared to Python's use of numpy functions, onnxscript needs to use the [onnx operator library](https://onnx.ai/onnx/operators/index.html) to implement most operations, while a small number of operations such as four arithmetic operations and simple indexes can be used directly and automatically converted.
 
