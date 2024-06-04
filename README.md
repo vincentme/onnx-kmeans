@@ -18,7 +18,7 @@ ONNX模型主要用于深度模型通用的表示和推理。但是，也可以�
 依赖安装
 
 ```
-pip install onnx onnxruntime onnxscript onnxsim
+pip install onnx onnxruntime onnxscript onnxsim scikit-learn
 ```
 
 如果需要运行`run_kmeans.mojo`来对比四种实现，则需要[安装mojo语言](https://docs.modular.com/mojo/manual/get-started/)。否则使用python运行`onnx_kmeans/create_model.py`即可。
@@ -142,7 +142,7 @@ In terms of specific implementation, it is unrealistic to directly use the onnx 
 Depends on installation
 
 ```
-pip install onnx onnxruntime onnxscript onnxsim
+pip install onnx onnxruntime onnxscript onnxsim scikit-learn
 ```
 
 If you need to run `run_kmeans.mojo` to compare the four implementations, you need to [install the mojo language](https://docs.modular.com/mojo/manual/get-started/). Otherwise, just use python to run `onnx_kmeans/create_model.py`.
