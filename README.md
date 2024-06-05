@@ -2,9 +2,9 @@
 
 ONNX模型主要用于深度模型通用的表示和推理。但是，也可以将传统算法函数使用ONNX模型来表示。这样做的优点包括：
 
-1.  生成统一的包含传统算法和深度模型的算法函数，并以ONNX模型的形式保存
-2.  方便算法部署实现，ONNX模型是与语言和运行平台无关的描述，无需将算法逻辑与某个语言实现和环境固定在一起，它也提供了各个语言的接口方便调用
-3.  可以利用每个平台和环境提供的Execution Provider来获得高效推理结果，如Intel、AMD和Nvidia各自的推理库OpenVINO、TensorRT和ROCm，以及移动平台的高通QNN、苹果CoreML和安卓NNAPI等。
+1. 生成统一的包含传统算法和深度模型的算法模型/函数，以ONNX模型的形式保存，并且这个模型包含所有的逻辑操作和必要参数
+2. 方便算法部署实现，ONNX模型是与语言和运行平台无关的描述，无需将算法逻辑与某个语言实现和环境固定在一起，它也提供了各个语言的接口方便调用
+3. 可以利用每个平台和环境提供的执行后端Execution Provider来获得高效推理结果，如Intel、AMD和Nvidia各自的推理库OpenVINO、TensorRT和ROCm，以及移动平台的高通QNN、苹果CoreML和安卓NNAPI等
 
 最近modular的一篇[博客](https://www.modular.com/blog/fast-k-means-clustering-in-mojo-guide-to-porting-python-to-mojo-for-accelerated-k-means-clustering)中将Python、scikit-learn和mojo实现的Kmeans聚类算法对比。这里也利用了这个例子中的配置，并与其他方案做对比。注意这里的python/numpy实现是在博客原版的基础上做了一点pythonic优化的，比原版速度更快。
 
@@ -126,9 +126,9 @@ pca降维可视化结果。每种实现的结果差异应该来自随机初始�
 
 The ONNX model is mainly used for general representation and reasoning of deep models. However, traditional algorithms can also be represented using ONNX models. The advantages of doing this include:
 
-1.  Generate a unified algorithm function containing traditional algorithms and deep models, and save it in the form of ONNX model
-2.  Convenient for algorithm deployment and implementation, the ONNX model is a description that is independent of language and operating platform. There is no need to fix the algorithm logic with a certain language implementation and environment. It also provides interfaces in each language for easy calling.
-3.  You can use the Execution Provider provided by each platform and environment to obtain efficient inference results, such as Intel, AMD and Nvidia's respective inference libraries OpenVINO, TensorRT and ROCm, as well as Qualcomm QNN, Apple CoreML and Android NNAPI for mobile platforms.
+1. Generate a unified algorithm model/function that includes traditional algorithms and deep models, save it in the form of an ONNX model, and this model contains all logical operations and necessary parameters
+2. Convenient for algorithm deployment and implementation, the ONNX model is a description that is independent of language and operating platform. There is no need to fix the algorithm logic with a certain language implementation and environment. It also provides interfaces in each language for easy calling
+3. You can use the execution backend Execution Provider provided by each platform and environment to obtain efficient inference results, such as Intel, AMD and Nvidia's respective inference libraries OpenVINO, TensorRT and ROCm, as well as Qualcomm QNN, Apple CoreML and Android NNAPI for mobile platforms
 
 A recent modular [blog](https://www.modular.com/blog/fast-k-means-clustering-in-mojo-guide-to-porting-python-to-mojo-for-accelerated-k-means-clustering) compared the Kmeans clustering algorithms implemented in Python, scikit-learn and mojo. The configuration in this example is also used here and compared with other solutions. Note that the python/numpy implementation here is a little pythonic optimized based on the original version of the blog, and is faster than the original version.
 
