@@ -67,7 +67,7 @@ self.centroids.append(data[np.random.randint(data.shape[0])])
                     break
 ```
 
-可以看出，相比于python使用numpy的函数，onnxscript需要使用[onnx operator算子库](https://onnx.ai/onnx/operators/index.html)来实现大多数的操作，而小部分操作如四则运算、简单索引则可以直接使用并且自动转换。
+可以看出，相比于python使用numpy的函数，onnxscript需要使用[onnx operator算子库](https://onnx.ai/onnx/operators/index.html)来实现大多数的操作，而小部分操作如四则运算、简单索引则可以直接使用并且自动转换。比较特殊的在于条件和循环操作，比如if中出现的变量必须在两个分支中都有定义，即使某个分支中并不使用；for循环中如果有break必须出现在最后。
 
 运行`run_kmeans.mojo`的输出（Intel i5-11500）
 
@@ -191,7 +191,7 @@ self.centroids.append(data[np.random.randint(data.shape[0])])
                     break
 ```
 
-It can be seen that compared to Python's use of numpy functions, onnxscript needs to use the [onnx operator library](https://onnx.ai/onnx/operators/index.html) to implement most operations, while a small number of operations such as four arithmetic operations and simple indexes can be used directly and automatically converted.
+It can be seen that compared to Python's use of numpy functions, onnxscript needs to use the [onnx operator library](https://onnx.ai/onnx/operators/index.html) to implement most operations, while a small number of operations such as four arithmetic operations and simple indexes can be used directly and automatically converted. What is special is the condition and loop operation. For example, the variables appearing in if must be defined in both branches, even if they are not used in a branch; if there is a break in the for loop, it must appear at the end.
 
 Output from `running run_kmeans.mojo` (Intel i5-11500)
 
