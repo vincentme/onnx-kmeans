@@ -13,7 +13,7 @@ ONNX模型主要用于深度模型通用的表示和推理。但是，也可以�
 1.  Kmeans++初始化，核心思想是产生尽量分散的初始中心。具体算法是：随机选择一个数据点作为第一个初始中心后，迭代产生剩下的初始中心。每次迭代时计算所有数据点到最近中心的距离。以归一后的最近距离为概率，随机采样一个数据点作为初始中心。
 2.  Kmeans迭代，思想是将数据点分给其最近的中心，然后同一类的点的平均值作为新中心。循环迭代以上步骤直到惯性inertia（数据点到其中心的距离和）变化值小于阈值。
 
-具体实现上，直接使用onnx库来手动编写ONNX算法模型是不太现实的。而[onnxsxript](https://github.com/microsoft/onnxscript)和[spox](https://github.com/Quantco/spox)两个库可以方便地将一定格式的python函数转换为相应的onnx graph和model。经过对比，onnxscript对于python的运算重载更多，也能自动转换逻辑控制为相应的op.If和op.Loop等，所以选用onnxscript来实现。
+具体实现上，直接使用onnx库来手动编写ONNX算法模型是不太现实的。而[onnxscript](https://github.com/microsoft/onnxscript)和[spox](https://github.com/Quantco/spox)两个库可以方便地将一定格式的python函数转换为相应的onnx graph和model。经过对比，onnxscript对于python的运算重载更多，也能自动转换逻辑控制为相应的op.If和op.Loop等，所以选用onnxscript来实现。
 
 依赖安装
 
@@ -137,7 +137,7 @@ Briefly talk about the process of Kmeans algorithm:
 1.  Kmeans++ initialization, the core idea is to generate initial centers that are as dispersed as possible. The specific algorithm is: after randomly selecting a data point as the first initial center, it iteratively generates the remaining initial centers. The distances of all data points to the nearest center are calculated at each iteration. Taking the normalized nearest distance as the probability, randomly sample a data point as the initial center.
 2.  Kmeans iteration, the idea is to assign the data points to their nearest centers, and then the average of the points of the same class is used as the new center. The above steps are iterated in a loop until the change value of inertia (sum of the distance from the data point to its center) is less than the threshold.
 
-In terms of specific implementation, it is unrealistic to directly use the onnx library to manually write the ONNX algorithm model. The two libraries [onnxsxript](https://github.com/microsoft/onnxscript) and [spox](https://github.com/Quantco/spox) can easily convert python functions in a certain format into corresponding onnx graphs and models. After comparison, onnxscript has more overloading of python operations, and can also automatically convert logic control into corresponding op.If and op.Loop, etc., so onnxscript is chosen for implementation.
+In terms of specific implementation, it is unrealistic to directly use the onnx library to manually write the ONNX algorithm model. The two libraries [onnxscript](https://github.com/microsoft/onnxscript) and [spox](https://github.com/Quantco/spox) can easily convert python functions in a certain format into corresponding onnx graphs and models. After comparison, onnxscript has more overloading of python operations, and can also automatically convert logic control into corresponding op.If and op.Loop, etc., so onnxscript is chosen for implementation.
 
 Depends on installation
 
