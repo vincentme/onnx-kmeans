@@ -30,6 +30,15 @@ def kmeans(data: DOUBLE['num_sample', 'num_feature'], n_clusters: INT64, max_ite
         inertia = op.ReduceSum(op.ReduceMin(centroids_distances, axes = [0]), keepdims=0) 
         labels = op.ArgMin(centroids_distances, axis = 0, keepdims = 0)
 
+        # onehot_index = op.Cast(op.OneHot(labels, n_clusters, [0, 1], axis = 0), to = onnx.TensorProto.BOOL)
+        # for j in range(n_clusters):
+        #     belong_to_cluster = onehot_index[j]
+        #     condition = op.Less(zero, op.ReduceSum(op.Cast(belong_to_cluster, to = onnx.TensorProto.FLOAT16), keepdims=0))
+        #     if condition:
+        #         centroid = op.ReduceMean(op.Compress(data, belong_to_cluster, axis=0), axes = [0], keepdims=0)
+        #         centroid_list = op.SequenceErase(centroid_list, j)
+        #         centroid_list = op.SequenceInsert(centroid_list, centroid, j)
+        
         for j in range(n_clusters):
             belong_to_cluster = op.Equal(labels, j)
             condition = op.Less(zero, op.ReduceSum(op.Cast(belong_to_cluster, to = onnx.TensorProto.FLOAT16), keepdims=0))
