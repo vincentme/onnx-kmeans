@@ -24,14 +24,15 @@ def kmeans(data: DOUBLE['num_sample', 'num_feature'], n_clusters: INT64, max_ite
     centroid_array = op.Unsqueeze(op.ConcatFromSequence(centroid_list, axis = 0, new_axis=1), axes = [1])
     previous_inertia = op.Constant(value = onnx.helper.make_tensor('zero', onnx.TensorProto.DOUBLE, (), [0.0]))
     inertia = op.Constant(value = onnx.helper.make_tensor('zero', onnx.TensorProto.DOUBLE, (), [0.0]))
+    zero = op.Constant(value = onnx.helper.make_tensor('zero', onnx.TensorProto.FLOAT16, (), [0.0]))
     for i in range(max_iterations):
         centroids_distances = op.ReduceSum((centroid_array - data)**2, axes = [2], keepdims = 0) # (num_centroid, num_sample)
         inertia = op.ReduceSum(op.ReduceMin(centroids_distances, axes = [0]), keepdims=0) 
         labels = op.ArgMin(centroids_distances, axis = 0, keepdims = 0)
-        
+
         for j in range(n_clusters):
             belong_to_cluster = op.Equal(labels, j)
-            condition = op.Less(op.Constant(value = onnx.helper.make_tensor('zero', onnx.TensorProto.FLOAT16, (), [0.0])), op.ReduceSum(op.Cast(belong_to_cluster, to = onnx.TensorProto.FLOAT16), keepdims=0))
+            condition = op.Less(zero, op.ReduceSum(op.Cast(belong_to_cluster, to = onnx.TensorProto.FLOAT16), keepdims=0))
             if condition:
                 centroid = op.ReduceMean(op.Compress(data, op.Equal(labels, j), axis=0), axes = [0], keepdims=0)
                 centroid_list = op.SequenceErase(centroid_list, j)
